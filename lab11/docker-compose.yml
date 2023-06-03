@@ -1,0 +1,42 @@
+version: "3.9"  #Wersja składni docker-compose
+
+services:  #usługi/kontenery
+
+  nginx:  #Kontener dla nginx
+    build:  #Budowanie obrazu kontenera
+      context: ./nginx  #Katalog w którym znajduje się Dockerfile dla nginx
+      dockerfile: Dockerfile  #ścieżka Dockerfile dla nginx
+    ports:  #Przekierowanie portów
+      - 6666:80  #Przekierowanie portu 6666 hosta na port 80 kontenera nginx
+    networks:  #Podłączenie do sieci
+      - backend  #Podłączenie do sieci backend
+      - frontend  #podłączenie do sieci frontend
+    depends_on:  #Zależności
+      - php  #Kontener nginx zależy od kontenera php
+
+  php:  #kontener dla php
+    build:  #Budowanie obrazu kontenera
+      context: ./php  #Katalog w którym znajduje się Dockerfile dla php
+      dockerfile: Dockerfile  #Ścieżka Dockerfile dla php
+    networks:  #podłączenie do sieci
+      - backend  #Podłączenie do sieci backend
+
+  mysql:  #Kontener dla mySQL
+    build:  #Budowanie obrazu kontenera
+      context: ./mysql  #Katalog w którym znajduje się Dockerfile dla mySQL
+      dockerfile: Dockerfile  #Ścieżka do Dockerfile dla MySQL
+    networks:  #Podłączenie do sieci
+      - backend  #Podłączenie do sieci backend
+
+  phpmyadmin:  #Kontener dla phpMyAdmin
+    build:  #Budowanie obrazu kontenera
+      context: ./phpmyadmin  #Katalog w którym znajduje się Dockerfile dla phpMyAdmin
+      dockerfile: Dockerfile  #Ścieżka do Dockerfile dla phpMyAdmin
+    ports:  #Przekierowanie portów
+      - 6001:80  #Przekierowanie portu 6001 hosta na port 80 kontenera phpMyAdmin
+    networks:  #Podłączenie do sieci
+      - backend  #Podłączenie do sieci backend
+
+networks:  #Sekcja sieci
+  backend:  #Sieć backend
+  frontend:  #Sieć frontend
